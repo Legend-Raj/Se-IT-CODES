@@ -1,0 +1,168 @@
+import java.util.*;
+
+class Employee {
+    protected String empName;
+    protected int empId;
+    protected String address;
+    protected String mailId;
+    protected String mobileNo;
+    protected float basicPay;
+    public Employee(String empName, int empId, String address, String mailId, String mobileNo, float basicPay) {
+        this.empName = empName;
+        this.empId = empId;
+        this.address = address;
+        this.mailId = mailId;
+        this.mobileNo = mobileNo;
+        this.basicPay = basicPay;
+    }
+    public void generatePaySlip() {
+        float da = 0.97f * basicPay;
+        float hra = 0.10f * basicPay;
+        float pf = 0.12f * basicPay;
+        float staffClubFund = 0.001f * basicPay;
+        float grossSalary = basicPay + da + hra + staffClubFund;
+        float netSalary = grossSalary - pf;
+
+        System.out.println("Employee Name: " + empName);
+        System.out.println("Employee ID: " + empId);
+        System.out.println("Address: " + address);
+        System.out.println("Mail ID: " + mailId);
+        System.out.println("Mobile No: " + mobileNo);
+        System.out.println("Basic Pay: " + basicPay);
+        System.out.println("DA: " + da);
+        System.out.println("HRA: " + hra);
+        System.out.println("PF: " + pf);
+        System.out.println("Staff Club Fund: " + staffClubFund);
+        System.out.println("Gross Salary: " + grossSalary);
+        System.out.println("Net Salary: " + netSalary);
+    }
+}
+
+class Programmer extends Employee {
+    public Programmer(String empName, int empId, String address, String mailId, String mobileNo, float basicPay) {
+        super(empName, empId, address, mailId, mobileNo, basicPay);
+    }
+    
+}
+
+class TeamLead extends Employee {
+    public TeamLead(String empName, int empId, String address, String mailId, String mobileNo, float basicPay) {
+        super(empName, empId, address, mailId, mobileNo, basicPay);
+    }
+}
+
+class AssistantProjectManager extends Employee {
+    public AssistantProjectManager(String empName, int empId, String address, String mailId, String mobileNo, float basicPay) {
+        super(empName, empId, address, mailId, mobileNo, basicPay);
+    }
+}
+
+class ProjectManager extends Employee {
+    public ProjectManager(String empName, int empId, String address, String mailId, String mobileNo, float basicPay) {
+        super(empName, empId, address, mailId, mobileNo, basicPay);
+    }
+}
+
+public class Employee1 {
+    public static void main(String[] args) {
+        Scanner scanner = new Scanner(System.in);
+        List<Employee> employees = new ArrayList<>();
+
+        while (true) {
+            System.out.println("\nEmployee Management System");
+            System.out.println("1. Create Programmer");
+            System.out.println("2. Create Team Lead");
+            System.out.println("3. Create Assistant Project Manager");
+            System.out.println("4. Create Project Manager");
+            System.out.println("5. Generate Pay Slips");
+            System.out.println("6. Exit");
+            System.out.print("Enter your choice: ");
+
+            int choice = scanner.nextInt();
+            scanner.nextLine();
+
+            switch (choice) {
+                case 1:
+                    Programmer programmer = createEmployee(scanner, Programmer.class);
+                    employees.add(programmer);
+                    break;
+                case 2:
+                    TeamLead teamLead = createEmployee(scanner, TeamLead.class);
+                    employees.add(teamLead);
+                    break;
+                case 3:
+                    AssistantProjectManager assistantProjectManager = createEmployee(scanner, AssistantProjectManager.class);
+                    employees.add(assistantProjectManager);
+                    break;
+                case 4:
+                    ProjectManager projectManager = createEmployee(scanner, ProjectManager.class);
+                    employees.add(projectManager);
+                    break;
+                case 5:
+                    generatePaySlips(employees);
+                    break;
+                case 6:
+                    System.out.println("Exiting the program.");
+                    scanner.close();
+                    System.exit(0);
+                default:
+                    System.out.println("Invalid choice. Please select a valid option.");
+            }
+        }
+    }
+
+    // Create a generic method to input employee details
+    private static <T extends Employee> T createEmployee(Scanner scanner, Class<T> employeeClass) {
+        System.out.print("Name: ");
+        String empName = scanner.nextLine();
+        System.out.print("Employee ID: ");
+        int empId = scanner.nextInt();
+        scanner.nextLine(); 
+        System.out.print("Address: ");
+        String address = scanner.nextLine();
+        String mailId;
+        String mobileNo;
+        while (true) {
+            System.out.print("Mail ID: ");
+            mailId = scanner.nextLine();
+            if (mailId.contains("@") && mailId.contains(".")) {
+                break;
+            } else {
+                System.out.println("Invalid email address. Please enter a valid email address.");
+            }
+        }
+        while (true) {
+            System.out.print("Mobile No: ");
+            mobileNo = scanner.nextLine();
+            if (mobileNo.length() == 10 && mobileNo.matches("\\d+")) {
+                break;
+            } else {
+                System.out.println("Invalid mobile number. Please enter a 10-digit mobile number.");
+            }
+        }
+        
+        System.out.print("Basic Pay: ");
+
+        float basicPay = scanner.nextFloat();
+
+        try {
+            // Use reflection to create an instance of the specified employee class
+            return employeeClass.getConstructor(String.class, int.class, String.class, String.class, String.class, float.class)
+                    .newInstance(empName, empId, address, mailId, mobileNo, basicPay);
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
+        }
+    }
+
+    private static void generatePaySlips(List<Employee> employees) {
+        if (employees.isEmpty()) {
+            System.out.println("No employees to generate pay slips for.");
+            return;
+        }
+        System.out.println("\nGenerating Pay Slips for Employees:");
+        for (Employee employee : employees) {
+            employee.generatePaySlip();
+        }
+    }
+}

@@ -1,0 +1,80 @@
+
+import java.util.*;
+abstract class Shape {
+
+	double dim1,dim2;
+	Shape()
+	{
+		dim1=0.0;
+		dim2=0.0;
+	}
+	void input()
+	{
+		Scanner sc=new Scanner(System.in);
+		dim1=sc.nextDouble();
+		dim2=sc.nextDouble();
+	}
+	abstract void compute_area();
+}
+ class Rectangle extends Shape{
+
+	void compute_area()
+	{
+		double area=dim1*dim2;
+		System.out.println("Area of rectangle is:"+area);
+	}
+}
+ class Triangle extends Shape{
+    void compute_area(){
+        double areea=(dim2*dim1)/2;
+        System.out.println("Area of triangle is :" + areea);
+    }
+    
+}
+ class Parallelogram extends Shape{
+
+	void compute_area()
+	{
+		double areaa=dim1*dim2;
+		System.out.println("Area of rectangle is:"+areaa);
+	}
+}
+public class Driver 
+{
+	public static void main(String[] args) {
+
+		Scanner sc=new Scanner(System.in);
+		Shape rect=new Rectangle();
+		Shape tri=new Triangle();
+		Shape para=new Parallelogram();
+		int x;
+		do
+		{
+			System.out.println("1 Rectangle\n2 Triangle\n3 Parallelogram\n0 Exit");
+			x=sc.nextInt();
+			switch(x)
+			{
+			case 1:
+				System.out.println("Enter length and breadth");
+				rect.input();
+				rect.compute_area();
+				break;
+			case 2:
+				System.out.println("Enter base and height");
+				tri.input();
+				tri.compute_area();
+				break;
+			case 3:
+				System.out.println("Enter base and perpendicular height");
+				para.input();
+				para.compute_area();
+				break;
+			case 0:
+				break;
+			default:
+				System.out.println("Invalid Input!");
+			}
+		}
+		while(x!=0);
+	}
+}

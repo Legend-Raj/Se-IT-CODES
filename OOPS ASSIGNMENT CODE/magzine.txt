@@ -1,0 +1,134 @@
+import java.util.*;
+
+class Publication {
+    protected String title, e;
+    protected float price;
+    protected int copies;
+
+    public void saleCopy() {
+        System.out.println(title + "\t" + price + "\t" + e + "\t" + copies);
+    }
+}
+
+class Book extends Publication {
+    private String author;
+    Scanner sc = new Scanner(System.in);
+
+    public void orderCopies() {
+        System.out.print("Enter title, author, edition, price, and number of copies: ");
+        title = sc.nextLine();
+        author = sc.nextLine();
+        e = sc.nextLine();
+        price = sc.nextFloat();
+        copies = sc.nextInt();
+        System.out.println("Book ordered successfully!");
+    }
+}
+
+class Magazine extends Publication {
+    int c;
+    Scanner sc = new Scanner(System.in);
+
+    public void orderQty() {
+        System.out.print("Enter title, price, and number of copies: ");
+        title = sc.nextLine();
+        price = sc.nextFloat();
+        copies = sc.nextInt();
+        System.out.println("Order:\n1. current issue\n2. other issue\nEnter your choice:");
+        c = sc.nextInt();
+        if (c == 1)
+            currentIssue();
+        if (c == 2)
+            receiveIssue();
+    }
+
+    public void currentIssue() {
+        System.out.println("Current issue ordered successfully");
+        e = "Current";
+    }
+
+    public void receiveIssue() {
+        System.out.print("Enter issue number: ");
+        e = sc.next();
+        System.out.println("Issue no." + e + " ordered successfully");
+    }
+}
+
+public class Test {
+    public static void main(String[] args) {
+        int n = 0, c = 0, k = 0;
+        float t = 0;
+        Scanner sc = new Scanner(System.in);
+        Book[] b = new Book[100];
+        Magazine[] m = new Magazine[100];
+        int choice;
+
+        do {
+            System.out.println("\nMENU:");
+            System.out.println("1. Order book");
+            System.out.println("2. Order magazine");
+            System.out.println("3. Display order details");
+            System.out.println("4. Display Sales of publication");
+            System.out.println("5. Exit");
+            System.out.print("Enter your choice: ");
+            choice = sc.nextInt();
+
+            switch (choice) {
+                case 1:
+                    int ww = 0;
+                    int a;
+                    do {
+                        b[ww] = new Book();
+                        b[ww].orderCopies();
+                        k += b[ww].copies;
+                        t += b[ww].copies * b[ww].price;
+                        ww++;
+                        System.out.println("Do you want to continue? If yes, enter 1: ");
+                        a = sc.nextInt();
+                    } while (a == 1);
+                    n = ww;
+                    break;
+
+                case 2:
+                    int p = 0;
+                    int cc;
+                    do {
+                        m[p] = new Magazine();
+                        m[p].orderQty();
+                        k += m[p].copies;
+                        t += m[p].copies * m[p].price;
+                        p++;
+                        System.out.println("Do you want to continue? If yes, enter 1: ");
+                        cc = sc.nextInt();
+                    }while(cc==1);
+                    
+                    break;
+
+                case 3:
+                    System.out.println("Title\tPrice\tEdition\tCopies");
+
+                    for (int z = 0; z < c; z++) {
+                        m[z].saleCopy();
+                    }
+
+                    for (int y = 0; y < n; y++) {
+                        b[y].saleCopy();
+                    }
+                    break;
+
+                case 4:
+                    System.out.println("Total sales:\nBooks\n" + k + "\nINR :" + t);
+                    break;
+
+                case 5:
+                    System.out.println("Exiting...");
+                    System.exit(0);
+                    break;
+
+                default:
+                    System.out.println("Invalid choice. Please try again.");
+            }
+
+        } while (choice != 5);
+    }
+}
